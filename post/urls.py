@@ -9,6 +9,9 @@ urlpatterns = [
 
     path('post/mixin/', views.MixinPostList.as_view()),
     path('post/mixin/<int:pk>/', views.MixinPostDetail.as_view()),
+
+    path('post/generics/', views.GenericPostList.as_view()),
+    path('post/generics/<int:pk>/', views.GenericPostDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
