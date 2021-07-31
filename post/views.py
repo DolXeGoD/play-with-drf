@@ -1,12 +1,14 @@
 from django.http.response import Http404
 from rest_framework import status
+from rest_framework import mixins
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .serializer import PostSerializer
 from .models import Post
 
-class PostList(APIView):
+class APIViewPostList(APIView):
     def get(self, request):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
@@ -22,7 +24,7 @@ class PostList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PostDetail(APIView):
+class APIViewPostDetail(APIView):
     def get(self, request, pk):
         try:
             post =  Post.objects.get(pk=pk)
@@ -35,7 +37,7 @@ class PostDetail(APIView):
 
     def put(self, request, pk):
         try:
-            post =  Post.objects.get(pk=pk)
+            post = Post.objects.get(pk=pk)
         except Post.DoesNotExist:
             raise Http404
         
@@ -55,4 +57,37 @@ class PostDetail(APIView):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+        
+class MixinPostList(
+    mixins.ListModelMixin,
+    mixins.CreateModelMixin,
+    generics.GenericAPIView
+):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class MixinPostDetail(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    generics.GenericAPIView
+):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
         
