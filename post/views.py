@@ -4,11 +4,14 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .serializer import PostSerializer
 from .models import Post
 
 class APIViewPostList(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
@@ -25,6 +28,8 @@ class APIViewPostList(APIView):
 
 
 class APIViewPostDetail(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get_object(self, pk):
         try:
             return Post.objects.get(pk=pk)
@@ -60,6 +65,7 @@ class MixinPostList(
     mixins.CreateModelMixin,
     generics.GenericAPIView
 ):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -76,6 +82,7 @@ class MixinPostDetail(
     mixins.DestroyModelMixin,
     generics.GenericAPIView
 ):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
@@ -90,11 +97,13 @@ class MixinPostDetail(
 
 
 class GenericPostList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 
 class GenericPostDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
