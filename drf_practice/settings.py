@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'post',
-    'user'
+    'user',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -112,6 +113,14 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'play_with_drf',
+    'DESCRIPTION': 'DRF 가지고 놀기',
+    'VERSION': '1.0.0',
+    # OTHER SETTINGS
 }
 
 # Internationalization
