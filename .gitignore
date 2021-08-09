@@ -14,3 +14,4 @@ media
 !**/migrations/__init__.py
 
 .vscode
+.DS_Store

@@ -19,7 +19,12 @@ from django.urls.conf import include
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
 urlpatterns = [
+    path('sentry-debug/', trigger_error),
+    
     path('admin/', admin.site.urls),
     path('', include('post.urls')),
     path('user/', include('user.urls')),
