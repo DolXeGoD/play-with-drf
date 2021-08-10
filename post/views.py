@@ -6,12 +6,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+
 from .serializer import PostSerializer
 from .models import Post
 
 class APIViewPostList(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-
+    serializer_class = PostSerializer
+    
     def get(self, request):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
@@ -29,6 +31,7 @@ class APIViewPostList(APIView):
 
 class APIViewPostDetail(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
 
     def get_object(self, pk):
         try:
